@@ -12,29 +12,42 @@ A Go-based wrapper tool for Tailwind CSS that automatically downloads and caches
 
 ## Installation
 
+### As a Go Tool (Recommended)
+
 ```bash
-go get -tool github.com/sdk-tools/tailwind
+go get -tool github.com/sdk-tools/tailwind@latest
 ```
 
-Or build from source:
+This makes it available as `go tool tailwind` in your project.
+
+### Global Installation
+
+Install globally:
 
 ```bash
-go build
+go install github.com/sdk-tools/tailwind@latest
 ```
 
 ## Usage
 
-Use it exactly like the Tailwind CSS CLI:
+### Via Go Tool (if installed as tool in go.mod)
 
 ```bash
 # Build CSS
-./tailwind -i input.css -o output.css
+go tool tailwind -i input.css -o output.css
 
 # Watch mode
-./tailwind -i input.css -o output.css --watch
+go tool tailwind -i input.css -o output.css --watch
 
 # Minify output
-./tailwind -i input.css -o output.css --minify
+go tool tailwind -i input.css -o output.css --minify
+```
+
+### Via Direct Binary (if installed globally)
+
+```bash
+# Runs from $GOPATH/bin or $GOBIN
+tailwind -i input.css -o output.css
 ```
 
 On first run, the wrapper will download the appropriate Tailwind CSS binary for your platform and cache it in `.tools/tailwind/`. Subsequent runs will use the cached binary.
