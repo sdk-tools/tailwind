@@ -64,6 +64,7 @@ TAILWIND_DOWNLOAD_URL=https://custom-mirror.com/tailwindcss ./tailwind --help
 1. **Platform Detection**: Detects your OS (macOS, Linux, Windows) and architecture (x64, arm64)
 2. **Version Resolution**: Resolves `latest` to the current Tailwind CSS version via GitHub API
 3. **Binary Download**: Downloads the appropriate binary from GitHub releases if not cached
+   - On Linux: Automatically uses MUSL variants for better portability and smaller size
 4. **Caching**: Stores binaries in `.tools/tailwind/` named by version and platform
 5. **Execution**: Passes all arguments to the Tailwind CSS binary and propagates exit codes
 
@@ -73,7 +74,7 @@ Binaries are cached in the project root at `.tools/tailwind/` with names like:
 
 ```
 tailwindcss-macos-arm64-v4.1.15
-tailwindcss-linux-x64-v4.0.0
+tailwindcss-linux-x64-musl-v4.0.0
 tailwindcss-windows-x64-v4.1.15.exe
 ```
 

@@ -20,8 +20,9 @@ func DetectPlatform() PlatformInfo {
 }
 
 // GetTailwindPlatformName maps Go OS/arch to Tailwind release naming
-// Tailwind releases use format: tailwindcss-{os}-{arch}
-// Example: tailwindcss-macos-arm64, tailwindcss-linux-x64, tailwindcss-windows-x64.exe
+// Tailwind releases use format: tailwindcss-{os}-{arch}[-musl]
+// Example: tailwindcss-macos-arm64, tailwindcss-linux-x64-musl, tailwindcss-windows-x64.exe
+// On Linux, prefer MUSL variants for better portability and smaller size
 func (p PlatformInfo) GetTailwindPlatformName() (string, error) {
 	var os, arch string
 
@@ -47,7 +48,14 @@ func (p PlatformInfo) GetTailwindPlatformName() (string, error) {
 		return "", fmt.Errorf("unsupported architecture: %s", p.Arch)
 	}
 
-	return fmt.Sprintf("tailwindcss-%s-%s", os, arch), nil
+	name := fmt.Sprintf("tailwindcss-%s-%s", os, arch)
+	
+	// Prefer MUSL binaries on Linux (statically linked, more portable)
+	if p.OS == "linux" {
+		name += "-musl"
+	}
+	
+	return name, nil
 }
 
 // GetBinaryName returns the binary name with version and platform

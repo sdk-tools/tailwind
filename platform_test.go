@@ -26,13 +26,13 @@ func TestGetTailwindPlatformName(t *testing.T) {
 		{
 			name:     "Linux x64",
 			platform: PlatformInfo{OS: "linux", Arch: "amd64"},
-			want:     "tailwindcss-linux-x64",
+			want:     "tailwindcss-linux-x64-musl",
 			wantErr:  false,
 		},
 		{
 			name:     "Linux ARM64",
 			platform: PlatformInfo{OS: "linux", Arch: "arm64"},
-			want:     "tailwindcss-linux-arm64",
+			want:     "tailwindcss-linux-arm64-musl",
 			wantErr:  false,
 		},
 		{
@@ -95,7 +95,7 @@ func TestGetBinaryName(t *testing.T) {
 			name:     "Linux x64 with version",
 			platform: PlatformInfo{OS: "linux", Arch: "amd64"},
 			version:  "3.4.1",
-			want:     "tailwindcss-linux-x64-v3.4.1",
+			want:     "tailwindcss-linux-x64-musl-v3.4.1",
 			wantErr:  false,
 		},
 	}
