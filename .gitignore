@@ -24,6 +24,13 @@ profile.cov
 go.work
 go.work.sum
 
+# Downloaded Tailwind binaries
+.tools/
+
+# Wrapper binary
+/tailwind
+/tailwind.exe
+
 # env file
 .env
 
