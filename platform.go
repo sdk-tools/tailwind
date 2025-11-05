@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os/exec"
 	"runtime"
 )
 
@@ -24,6 +25,11 @@ func DetectPlatform() PlatformInfo {
 // Example: tailwindcss-macos-arm64, tailwindcss-linux-x64-musl, tailwindcss-windows-x64.exe
 // On Linux, prefer MUSL variants for better portability and smaller size
 func (p PlatformInfo) GetTailwindPlatformName() (string, error) {
+	return p.getTailwindPlatformNameWithMuslCheck(isMusl)
+}
+
+// getTailwindPlatformNameWithMuslCheck allows injecting musl detection for testing
+func (p PlatformInfo) getTailwindPlatformNameWithMuslCheck(isMusl func() bool) (string, error) {
 	var os, arch string
 
 	switch p.OS {
@@ -50,12 +56,29 @@ func (p PlatformInfo) GetTailwindPlatformName() (string, error) {
 
 	name := fmt.Sprintf("tailwindcss-%s-%s", os, arch)
 	
-	// Prefer MUSL binaries on Linux (statically linked, more portable)
-	if p.OS == "linux" {
+	// On Linux, use musl variant if ldd shows musl, otherwise use glibc variant
+	if p.OS == "linux" && isMusl() {
 		name += "-musl"
 	}
 	
 	return name, nil
+}
+
+// isMusl checks if the system uses musl libc by running ldd --version
+func isMusl() bool {
+	cmd := exec.Command("ldd", "--version")
+	output, err := cmd.CombinedOutput()
+	if err != nil {
+		return false
+	}
+	return isMuslOutput(output)
+}
+
+// isMuslOutput checks if ldd output indicates musl libc
+func isMuslOutput(output []byte) bool {
+	// musl ldd outputs "musl libc" in its version string
+	// glibc ldd outputs "ldd (GNU libc)" or "GLIBC"
+	return len(output) > 0 && output[0] == 'm' // "musl" starts with 'm'
 }
 
 // GetBinaryName returns the binary name with version and platform
