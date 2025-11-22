@@ -1,3 +1,3 @@
-module github.com/sdk-tools/tailwind
+module sdk.tools/tailwind
 
 go 1.21
